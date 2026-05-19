@@ -212,16 +212,6 @@ body {
 .btn-download { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
 .btn-copy { background: rgba(255,255,255,0.08); color: #ddd; border: 1px solid rgba(255,255,255,0.1); }
 .btn-zip { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
-.raw-json { margin-top: 16px; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 14px; }
-.raw-json .label { color: rgba(255,255,255,0.25); font-size: 12px; margin-bottom: 6px; }
-.raw-json pre {
-  color: rgba(255,255,255,0.45);
-  font-size: 12px;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-break: break-all;
-  max-height: 180px;
-}
 .footer {
   text-align: center;
   padding: 30px 0 10px;
@@ -300,10 +290,6 @@ body {
       </div>
       <div class="info-grid" id="infoGrid"></div>
       <div class="actions" id="actionBtns"></div>
-      <div class="raw-json">
-        <div class="label">原始 JSON 返回</div>
-        <pre id="rawJson">等待返回...</pre>
-      </div>
     </div>
   </div>
 
@@ -410,7 +396,6 @@ async function parseVideo() {
     renderResult(data);
     result.classList.add('show');
     showStatus('success', '✅ 解析成功！无水印内容已就绪');
-    document.getElementById('rawJson').textContent = JSON.stringify(data, null, 2);
 
   } catch (err) {
     showStatus('error', '请求失败：' + err.message);
@@ -443,10 +428,6 @@ function renderResult(data) {
     fields.push({ label: '作者', value: d.author.name || '-', full: false });
     fields.push({ label: '作者ID', value: d.author.id || '-', full: false });
   }
-  if (d.duration) {
-    const secs = Math.floor(d.duration / 1000);
-    fields.push({ label: '时长', value: secs + '秒', full: false });
-  }
   if (d.desc && d.desc !== d.title) {
     fields.push({ label: '描述', value: d.desc.length > 200 ? d.desc.slice(0,200) + '...' : d.desc, full: true });
   }
@@ -465,8 +446,8 @@ function renderResult(data) {
     const dl = document.createElement('a');
     dl.className = 'action-btn btn-download';
     dl.href = '/api/proxy?url=' + encodeURIComponent(d.url) + '&dl=1';
+    dl.download = 'video.mp4';
     dl.textContent = '⬇ 下载视频';
-    dl.target = '_blank';
     actionBtns.appendChild(dl);
 
     if (d.video_backup && d.video_backup.length > 0) {
@@ -474,8 +455,8 @@ function renderResult(data) {
       backupBtn.className = 'action-btn btn-download';
       backupBtn.style.background = 'linear-gradient(135deg, #6366f1, #4f46e5)';
       backupBtn.href = '/api/proxy?url=' + encodeURIComponent(d.video_backup[0]) + '&dl=1';
+      backupBtn.download = 'video.mp4';
       backupBtn.textContent = '🔄 备用线路下载';
-      backupBtn.target = '_blank';
       actionBtns.appendChild(backupBtn);
     }
   }
