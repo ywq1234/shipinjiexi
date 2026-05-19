@@ -40,7 +40,17 @@ module.exports = async (req, res) => {
     }
 
     if (isDownload) {
-      const filename = targetUrl.split('/').pop().split('?')[0] || 'download';
+      // 根据内容类型决定文件扩展名
+      const extMap = {
+        'video/mp4': '.mp4',
+        'video/webm': '.webm',
+        'video/quicktime': '.mov',
+        'image/jpeg': '.jpg',
+        'image/png': '.png',
+        'image/webp': '.webp'
+      };
+      const ext = extMap[contentType] || '.mp4';
+      const filename = 'video' + ext;
       res.setHeader('Content-Disposition', 'attachment; filename="' + filename + '"');
     }
 
