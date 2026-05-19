@@ -1,0 +1,8 @@
+{
+  "name": "watermark-remover",
+  "version": "1.0.0",
+  "description": "多平台去水印下载器 - Vercel",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
